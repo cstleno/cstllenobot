@@ -227,12 +227,20 @@ async def etkinlik_olustur(
     saat: str
 ):
 
-    if not interaction.user.guild_permissions.administrator:
-        await interaction.response.send_message(
-            "❌ Bu komutu yalnızca yöneticiler kullanabilir.",
-            ephemeral=True
-        )
-        return
+ALLOWED_ROLE_IDS = [
+1478765805159190591
+1388474281553428500
+1466879124617429236
+]
+
+user_role_ids = [role.id for role in interaction.user.roles]
+
+if not any(role_id in ALLOWED_ROLE_IDS for role_id in user_role_ids):
+    await interaction.response.send_message(
+        "❌ Bu komutu kullanmak için yetkin yok.",
+        ephemeral=True
+    )
+    return
 
     event_id = len(events) + 1
 
